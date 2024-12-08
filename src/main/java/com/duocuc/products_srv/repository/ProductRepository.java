@@ -1,5 +1,7 @@
 package com.duocuc.products_srv.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +18,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
   // Búsqueda por nombre o descripción
   Page<Product> findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String nameKeyword, String descKeyword,
       Pageable pageable);
+
+  List<Product> findByIdIn(List<Long> ids); // Buscar productos por una lista de IDs
 }

@@ -32,7 +32,10 @@ public class SecurityConfig {
         .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Habilitar CORS
         .csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers(HttpMethod.GET, "/api/products").permitAll() // Permitir SOLO GET /api/products
+            // Permitir SOLO GET /api/products
+            .requestMatchers(HttpMethod.GET, "/api/products").permitAll()
+            // Permitir SOLO GET /api/products/by-ids
+            .requestMatchers(HttpMethod.POST, "/api/products/by-ids").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/products/{id:[\\d]+}").permitAll()
             .anyRequest().authenticated() // Proteger todas las demás rutas
         )

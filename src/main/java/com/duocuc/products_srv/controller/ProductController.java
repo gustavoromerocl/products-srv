@@ -1,6 +1,8 @@
 package com.duocuc.products_srv.controller;
 
-import com.duocuc.products_srv.dto.PageDto;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.duocuc.products_srv.dto.PageDto;
+import com.duocuc.products_srv.dto.ProductIemDto;
 import com.duocuc.products_srv.model.Product;
 import com.duocuc.products_srv.service.ProductService;
 
@@ -24,6 +28,17 @@ public class ProductController {
 
   @Autowired
   private ProductService productService;
+
+  @PostMapping("/by-ids")
+  public ResponseEntity<List<ProductIemDto>> getProductsByIds(@RequestBody List<Long> ids) {
+    List<Product> products = productService.getProductsByIds(ids);
+
+    List<ProductIemDto> productDtos = products.stream()
+        .map(product -> new ProductIemDto(product.getId(), product.getName(), product.getPrice()))
+        .collect(Collectors.toList());
+
+    return ResponseEntity.ok(productDtos);
+  }
 
   @GetMapping
   public Object getProducts(

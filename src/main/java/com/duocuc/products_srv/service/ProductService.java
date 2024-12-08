@@ -1,10 +1,10 @@
 package com.duocuc.products_srv.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +17,13 @@ public class ProductService {
 
   @Autowired
   private ProductRepository productRepository;
+
+  public List<Product> getProductsByIds(List<Long> ids) {
+    if (ids == null || ids.isEmpty()) {
+      throw new IllegalArgumentException("La lista de IDs no puede estar vacía.");
+    }
+    return productRepository.findByIdIn(ids);
+  }
 
   public Page<Product> findAll(Pageable pageable) {
     return productRepository.findAll(pageable);
