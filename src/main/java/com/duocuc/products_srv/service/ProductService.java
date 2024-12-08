@@ -1,9 +1,11 @@
 package com.duocuc.products_srv.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.duocuc.products_srv.model.Category;
@@ -16,8 +18,18 @@ public class ProductService {
   @Autowired
   private ProductRepository productRepository;
 
-  public List<Product> getAllProducts() {
-    return productRepository.findAll();
+  public Page<Product> getAllProducts(int page, int size, String keyword) {
+    if (page < 0) {
+      throw new IllegalArgumentException("La página no puede ser menor que 0");
+    }
+    Pageable pageable = PageRequest.of(page, size);
+
+    if (keyword != null && !keyword.isBlank()) {
+      return productRepository.findByNameContainingIgnoreCase(keyword, keyword,
+          pageable);
+    }
+
+    return productRepository.findAll(pageable);
   }
 
   public Optional<Product> getProductById(Long id) {
