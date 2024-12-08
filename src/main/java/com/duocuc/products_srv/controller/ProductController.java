@@ -1,7 +1,9 @@
 package com.duocuc.products_srv.controller;
 
+import com.duocuc.products_srv.dto.PageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,13 +25,36 @@ public class ProductController {
   @Autowired
   private ProductService productService;
 
-  @GetMapping()
-  public Page<Product> getAllProducts(
-      @RequestParam(value = "page", defaultValue = "1") int page, // Página inicia desde 1
-      @RequestParam(value = "size", defaultValue = "10") int size,
-      @RequestParam(value = "keyword", required = false) String keyword) {
-    // Ajustar el índice para Spring Data (internamente usa página 0 como inicio)
-    return productService.getAllProducts(page - 1, size, keyword);
+  @GetMapping
+  public Object getProducts(
+      @RequestParam(value = "keyword", required = false) String keyword,
+      @RequestParam(value = "page", defaultValue = "1") int page,
+      @RequestParam(value = "size", defaultValue = "10") int size) {
+
+    if (page < 1) {
+      throw new IllegalArgumentException("La página no puede ser menor que 1");
+    }
+
+    PageRequest pageRequest = PageRequest.of(page - 1, size);
+
+    if (keyword != null && !keyword.isEmpty()) {
+      // Manejo de búsqueda por palabra clave
+      Page<Product> productsPage = productService.searchByKeyword(keyword, pageRequest);
+      return convertPageToDto(productsPage); // Convertir a DTO
+    }
+
+    // Manejo estándar
+    return productService.findAll(pageRequest);
+  }
+
+  // Método para convertir `Page` a `PageDto`
+  private PageDto<Product> convertPageToDto(Page<Product> productsPage) {
+    return new PageDto<>(
+        productsPage.getContent(),
+        productsPage.getNumber() + 1,
+        productsPage.getSize(),
+        productsPage.getTotalElements(),
+        productsPage.getTotalPages());
   }
 
   @GetMapping("/{id}")

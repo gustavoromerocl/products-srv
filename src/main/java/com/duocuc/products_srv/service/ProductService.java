@@ -18,18 +18,12 @@ public class ProductService {
   @Autowired
   private ProductRepository productRepository;
 
-  public Page<Product> getAllProducts(int page, int size, String keyword) {
-    if (page < 0) {
-      throw new IllegalArgumentException("La página no puede ser menor que 0");
-    }
-    Pageable pageable = PageRequest.of(page, size);
-
-    if (keyword != null && !keyword.isBlank()) {
-      return productRepository.findByNameContainingIgnoreCase(keyword, keyword,
-          pageable);
-    }
-
+  public Page<Product> findAll(Pageable pageable) {
     return productRepository.findAll(pageable);
+  }
+
+  public Page<Product> searchByKeyword(String keyword, Pageable pageable) {
+    return productRepository.findByNameContainingIgnoreCase(keyword, pageable);
   }
 
   public Optional<Product> getProductById(Long id) {
