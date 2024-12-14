@@ -1,13 +1,13 @@
 package com.duocuc.products_srv.exception;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.ServletWebRequest;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.web.context.request.WebRequest;
 
 class GlobalExceptionHandlerTest {
 
