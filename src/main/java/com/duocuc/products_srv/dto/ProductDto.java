@@ -1,5 +1,7 @@
 package com.duocuc.products_srv.dto;
 
+import java.util.Objects;
+
 import com.duocuc.products_srv.model.Category;
 
 public class ProductDto {
@@ -82,4 +84,39 @@ public class ProductDto {
   public void setImageUrl(String imageUrl) {
     this.imageUrl = imageUrl;
   }
+
+  @Override
+  public String toString() {
+    return "ProductDto{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", description='" + description + '\'' +
+        ", price=" + price +
+        ", stock=" + stock +
+        ", category=" + category +
+        ", imageUrl='" + imageUrl + '\'' +
+        '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    ProductDto that = (ProductDto) o;
+    return id.equals(that.id) &&
+        name.equals(that.name) &&
+        description.equals(that.description) &&
+        price.equals(that.price) &&
+        stock.equals(that.stock) &&
+        category == that.category &&
+        imageUrl.equals(that.imageUrl);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, name, description, price, stock, category, imageUrl);
+  }
+
 }

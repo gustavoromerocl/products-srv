@@ -49,6 +49,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
       // Configurar el contexto de seguridad
       SecurityContextHolder.getContext().setAuthentication(authentication);
+    } else {
+      SecurityContextHolder.clearContext(); // Asegura que no haya autenticación si el token no es válido o está ausente
     }
 
     filterChain.doFilter(request, response);
