@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
   }
 
   // Clase interna para la estructura de la respuesta de error
-  private static class ErrorResponse {
+  static class ErrorResponse {
     private int status;
     private String message;
     private String path;
